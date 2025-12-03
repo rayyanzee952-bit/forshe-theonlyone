@@ -3,100 +3,136 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ForShe'sTheOnlyOne 💗</title>
+<title>Wake My Princess 💗</title>
 
 <style>
     body {
-        background: #ffd6e9;
-        font-family: 'Arial', sans-serif;
+        background: #ffd6ea;
+        font-family: "Poppins", sans-serif;
         display: flex;
         flex-direction: column;
-        justify-content: center;
         align-items: center;
+        justify-content: center;
         height: 100vh;
+        color: #d60e8c;
         margin: 0;
+        overflow: hidden;
         text-align: center;
-        color: #d10f84;
     }
+
     h1 {
-        font-size: 24px;
+        font-size: 26px;
         margin-bottom: 20px;
-    }
-    input[type="time"] {
-        font-size: 18px;
-        padding: 10px;
-        border-radius: 10px;
-        border: 2px solid #ff87c0;
-        background: white;
-        color: #d10f84;
-        margin-bottom: 20px;
-    }
-    button {
-        font-size: 18px;
-        background: #ff4da6;
-        color: white;
-        border: none;
-        padding: 14px 25px;
-        border-radius: 12px;
-        cursor: pointer;
-        margin-top: 10px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    }
-    button:hover {
-        background: #ff2d95;
-    }
-    #message {
-        margin-top: 20px;
-        font-size: 18px;
         font-weight: bold;
     }
-</style>
 
+    input[type="time"] {
+        padding: 10px;
+        border-radius: 10px;
+        border: 2px solid #ff78c5;
+        font-size: 18px;
+        background: #fff;
+        color: #d10f84;
+    }
+
+    button {
+        font-size: 18px;
+        border: none;
+        border-radius: 12px;
+        padding: 14px 25px;
+        cursor: pointer;
+        margin-top: 15px;
+        color: #fff;
+        background: #ff4da6;
+        transition: 0.2s;
+        box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+    }
+
+    button:hover {
+        background: #f02c92;
+    }
+
+    #msg {
+        margin-top: 15px;
+        font-size: 17px;
+        font-weight: bold;
+    }
+
+    .heart {
+        position: absolute;
+        color: #ff4da6;
+        animation: floatUp 4s linear infinite;
+        opacity: 0.7;
+        font-size: 20px;
+    }
+
+    @keyframes floatUp {
+        0% { transform: translateY(0); opacity: 1; }
+        100% { transform: translateY(-300px); opacity: 0; }
+    }
+</style>
 </head>
+
 <body>
 
-<h1>ForShe'sTheOnlyOne 💗</h1>
-<input type="time" id="alarmTime">
-<button onclick="setAlarm()">Aktifkan Alarm 💗</button>
-<p id="message"></p>
+<h1>Wake My Princess 💗</h1>
 
-<audio id="alarmSound" src="https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg" preload="auto"></audio>
+<input type="time" id="setTime">
+<button onclick="setAlarm()">Set Alarm 💗</button>
+<p id="msg"></p>
+
+<!-- Alarm sound - romantic soft -->
+<audio id="alarmSound" src="https://actions.google.com/sounds/v1/alarms/digital_watch_alarm.ogg"></audio>
 
 <script>
-let alarmTimeout;
+let alarmTimer;
+const alarmSound = document.getElementById("alarmSound");
+
+function createHearts() {
+    const heart = document.createElement("div");
+    heart.innerHTML = "💗";
+    heart.classList.add("heart");
+    heart.style.left = Math.random() * window.innerWidth + "px";
+    heart.style.top = window.innerHeight + "px";
+    document.body.appendChild(heart);
+    setTimeout(()=>heart.remove(), 4000);
+}
+
+setInterval(createHearts, 600);
 
 function setAlarm() {
-    const alarmTime = document.getElementById("alarmTime").value;
-    if (!alarmTime) {
-        alert("Pilih jam dulu ya Princess 💗");
-        return;
-    }
+    const time = document.getElementById("setTime").value;
+    if (!time) return alert("Pilih jam dulu ya Princess 💗");
 
+    const [h, m] = time.split(":");
     const now = new Date();
-    const alarmDate = new Date();
-    const [hour, minute] = alarmTime.split(":");
-    alarmDate.setHours(hour);
-    alarmDate.setMinutes(minute);
-    alarmDate.setSeconds(0);
+    const alarm = new Date();
+    alarm.setHours(h, m, 0, 0);
 
-    if (alarmDate <= now) {
-        alarmDate.setDate(alarmDate.getDate() + 1);
-    }
+    if (alarm <= now) alarm.setDate(alarm.getDate() + 1);
 
-    const timeToAlarm = alarmDate - now;
+    const diff = alarm - now;
 
-    clearTimeout(alarmTimeout);
-    alarmTimeout = setTimeout(triggerAlarm, timeToAlarm);
+    clearTimeout(alarmTimer);
+    alarmTimer = setTimeout(triggerAlarm, diff);
 
-    document.getElementById("message").innerText =
-        "Alarm aktif 💗 Agent Rayyan akan membangunkanmu 🥺";
+    document.getElementById("msg").innerHTML =
+        "Alarm aktif 🌸 Agent Rayyan siap bangunin kamu 😘";
 }
 
 function triggerAlarm() {
-    const alarm = document.getElementById("alarmSound");
-    alarm.loop = true;
-    alarm.play();
-    alert("Agent Rayyan memanggilmu 💗");
+    alarmSound.loop = true;
+    alarmSound.play();
+
+    let awake = confirm("Princess ✨ kamu harus hidup lama biar sama aku terus 😘");
+
+    if (awake) {
+        alarmSound.pause();
+        alarmSound.currentTime = 0;
+        alert("Good girl ❤️ Agent Rayyan bangga sama kamu!");
+    } else {
+        setTimeout(triggerAlarm, 300000); // snooze 5 min
+    }
 }
 </script>
 
